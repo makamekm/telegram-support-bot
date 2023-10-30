@@ -8,20 +8,22 @@
   <style>
     body {
       background-color: transparent;
-      margin-top: 335px;
+      height: 100vh;
+      height: 100dvh;
     }
 
-    .container {
-      display: none;
+    .chat-container {
+      display: flex;
+      flex-direction: column;
       background-color: white;
       margin: 0 !important;
       border-radius: 20px 20px 0 0;
-      height: 400px;
-      max-width: 1000px;
+      height: 100%;
+      max-width: 100%;
     }
 
     #messages {
-      height: 290px;
+      flex: 1;
       padding: 20px;
       overflow-y: auto;
       margin-bottom: 10px;
@@ -79,19 +81,6 @@
       border-bottom-right-radius: 20px !important;
     }
 
-    .topbar {
-      width: 100%;
-      height: 50px;
-      padding: 20px 0px 0px 20px;
-    }
-
-    .container-min {
-      background-color: white;
-      margin: 0 !important;
-      border-radius: 20px 20px 0 0;
-      height: 65px;
-    }
-
     .btn-close {
       float: right;
       margin-left: 10px;
@@ -125,40 +114,21 @@
 </head>
 
 <body>
-  <div class="container-min" id="chat-container-bar">
-    <div class="topbar row">
-      <div class="col">
-        <h4>Chat with us</h4>
-      </div>
-      <div class="col">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-    </div>
-  </div>
-
-  <div class="container" id="chat-container">
-    <div class="topbar row">
-      <div class="col">
-        <h4>Chat with us</h4>
-      </div>
-      <div class="col">
-        <button type="button" id="chat-container-close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-    </div>
+  <div class="chat-container" id="chat-container">
     <div id="messages"></div>
 
     <form id="form" action="" class="input-group">
       <input id="input" type="text" class="form-control" placeholder="Type your message here..." autocomplete="off">
       <button type="submit" class="btn btn-secondary">Send</button>
+    </form>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    var socket = io();
+    let socket = io();
 
-    var form = document.getElementById('form');
-    var input = document.getElementById('input');
+    let form = document.getElementById('form');
+    let input = document.getElementById('input');
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -183,9 +153,9 @@
     let handleMsg = function (type, msg) {
       let current = new Date();
       let time = current.getHours().toString().padStart(2, 0) + ":" + current.getMinutes().toString().padStart(2, 0)
-      var msgdiv = document.createElement('div');
+      let msgdiv = document.createElement('div');
       msgdiv.className = 'msg-full';
-      var item = document.createElement('p');
+      let item = document.createElement('p');
       item.className = 'msg ' + (type == 'user' ? 'msg-you' : 'msg-other');
       item.innerHTML = msg + '<div class="time">' + time + '</div>';
       msgdiv.appendChild(item);
@@ -200,16 +170,6 @@
       let chatContainerBar = document.getElementById('chat-container-bar');
       let chatContainer = document.getElementById('chat-container');
       let chatContainerClose = document.getElementById('chat-container-close');
-      chatContainerBar.addEventListener('click', function () {
-        chatContainerBar.style.display = 'none';
-        chatContainer.style.display = 'block';
-        document.body.style.marginTop = '0px';
-      });
-      chatContainerClose.addEventListener('click', function () {
-        chatContainerBar.style.display = 'block';
-        chatContainer.style.display = 'none';
-        document.body.style.marginTop = '335px';
-      });
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
